@@ -65,9 +65,9 @@ const homepageItems = [
 
 const HomePage = () => {
   return (
-    <div className="flex h-screen flex-1 flex-col items-center justify-center text-white">
-      <h2 className="text-4xl font-bold">ChatGPT</h2>
-      <div className="mt-16 flex flex-col space-x-4 md:flex-row">
+    <div className="flex h-fit flex-col items-center justify-center overflow-auto px-2 py-6 text-white md:h-screen">
+      <h2 className="mb-16 text-4xl font-bold">ChatGPT</h2>
+      <div className="flex flex-col space-x-4 space-y-6 md:flex-row md:space-y-0">
         {homepageItems.map((item, index) => (
           <div className="flex flex-col items-center space-y-4" key={index}>
             <div className="flex flex-col items-center justify-center space-y-4">
