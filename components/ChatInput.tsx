@@ -6,6 +6,8 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { db } from "../firebase";
+import useSWR from "swr";
+import ModelSelection from "./ModelSelection";
 
 type Props = {
   chatId: string;
@@ -16,7 +18,9 @@ const ChatInput = ({ chatId }: Props) => {
   const { data: session } = useSession();
 
   //TODO: get model input
-  const model = "text-davinci-003";
+  const { data: model } = useSWR("model", {
+    fallbackData: "text-davinci-003",
+  });
 
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,22 +71,27 @@ const ChatInput = ({ chatId }: Props) => {
     });
   };
   return (
-    <form
-      className="m-4 flex items-center rounded-lg bg-secondary"
-      onSubmit={sendMessage}
-    >
-      <input
-        type="text"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        disabled={!session}
-        placeholder="Enter your message here"
-        className="w-full border-none bg-transparent p-3 text-white outline-none placeholder:text-[14px]"
-      />
-      <button type="submit" disabled={!prompt || !session}>
-        <PaperAirplaneIcon className="mr-4 h-6 w-6 cursor-pointer text-white/40" />
-      </button>
-    </form>
+    <div>
+      <form
+        className="m-4 flex items-center rounded-lg bg-secondary"
+        onSubmit={sendMessage}
+      >
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          disabled={!session}
+          placeholder="Enter your message here"
+          className="w-full border-none bg-transparent p-3 text-white outline-none placeholder:text-[14px]"
+        />
+        <button type="submit" disabled={!prompt || !session}>
+          <PaperAirplaneIcon className="mr-4 h-6 w-6 cursor-pointer text-white/40" />
+        </button>
+      </form>
+      <div className="mx-4 my-2 md:hidden">
+        <ModelSelection />
+      </div>
+    </div>
   );
 };
 
