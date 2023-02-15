@@ -1,0 +1,46 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import React from "react";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { db } from "../firebase";
+import Message from "./Message";
+
+type Props = {
+  chatId: string;
+};
+
+const Chat = ({ chatId }: Props) => {
+  const scroll = useRef<HTMLDivElement>(null);
+  const { data: session } = useSession();
+
+  const [messages] = useCollection(
+    session &&
+      query(
+        collection(
+          db,
+          "users",
+          session?.user?.email!,
+          "chats",
+          chatId,
+          "messages"
+        ),
+        orderBy("createdAt", "asc")
+      )
+  );
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+  return (
+    <div className="flex flex-1 flex-col items-center overflow-y-auto">
+      {messages?.docs.map((message) => (
+        <Message key={message.id} message={message.data()} scrollRef={scroll} />
+      ))}
+    </div>
+  );
+};
+
+export default Chat;
