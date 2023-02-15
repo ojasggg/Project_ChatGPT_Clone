@@ -1,7 +1,7 @@
 import { Poppins } from "@next/font/google";
 import "../styles/globals.css";
 import { getServerSession } from "next-auth";
-import { Login, SessionProvider, Sidebar } from "../components";
+import { ClientProvider, Login, SessionProvider, Sidebar } from "../components";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 const poppins = Poppins({
@@ -27,6 +27,7 @@ export default async function RootLayout({
               <div>
                 <Sidebar />
               </div>
+              <ClientProvider />
 
               <div className="flex-1">{children}</div>
             </div>
