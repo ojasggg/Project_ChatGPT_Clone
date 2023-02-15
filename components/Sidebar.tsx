@@ -21,14 +21,13 @@ const Sidebar = () => {
       <div className="m-2 flex flex-1 flex-col space-y-2">
         <NewChat />
 
-        <div></div>
         {chats?.docs.map((chat, index) => (
           <ChatRow key={chat.id} id={chat.id} />
         ))}
       </div>
 
       <div
-        className="mb-10 flex cursor-pointer items-center justify-center space-x-2"
+        className="mb-5 flex cursor-pointer items-center justify-center space-x-2"
         onClick={() => signOut()}
       >
         {session && (
