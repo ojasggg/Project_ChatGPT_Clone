@@ -7,6 +7,7 @@ import React from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../firebase";
 import Message from "./Message";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   chatId: string;
@@ -36,6 +37,12 @@ const Chat = ({ chatId }: Props) => {
   }, [messages]);
   return (
     <div className="flex flex-1 flex-col items-center overflow-y-auto">
+      {messages?.empty && (
+        <div className="mt-10 flex flex-col items-center text-white">
+          <p className="lg:text-xl">Type a Prompt in below to get Started!</p>
+          <ArrowDownCircleIcon className="mt-4 h-8 w-8 animate-bounce" />
+        </div>
+      )}
       {messages?.docs.map((message) => (
         <Message key={message.id} message={message.data()} scrollRef={scroll} />
       ))}
