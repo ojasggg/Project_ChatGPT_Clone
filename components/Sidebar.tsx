@@ -6,10 +6,11 @@ import NewChat from "./NewChat";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import ChatRow from "./ChatRow";
+import ModelSelection from "./ModelSelection";
 
 const Sidebar = () => {
   const { data: session } = useSession();
-  const [chats, loading, error] = useCollection(
+  const [chats, loading] = useCollection(
     session &&
       query(
         collection(db, "users", session?.user?.email!, "chats"),
@@ -20,6 +21,16 @@ const Sidebar = () => {
     <div className="flex h-screen w-[130px] flex-col bg-sidebar_primary text-white  lg:w-[300px]">
       <div className="m-2 flex flex-1 flex-col space-y-2">
         <NewChat />
+
+        <div className="hidden sm:inline">
+          <ModelSelection />
+        </div>
+
+        {loading && (
+          <div className="animate-pulse text-center text-white">
+            <p>Loading Chats...</p>
+          </div>
+        )}
 
         {chats?.docs.map((chat, index) => (
           <ChatRow key={chat.id} id={chat.id} />
