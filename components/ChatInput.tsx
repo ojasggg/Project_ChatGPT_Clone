@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "react-hot-toast";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useSession } from "next-auth/react";
@@ -46,7 +47,9 @@ const ChatInput = ({ chatId }: Props) => {
       message
     );
 
-    await fetch("/api/askQuestions", {
+    const notification = toast.loading("ChatGPT Clone is Thinking....");
+
+    await fetch("/api/askQuestion", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,6 +60,10 @@ const ChatInput = ({ chatId }: Props) => {
         model,
         session,
       }),
+    }).then(() => {
+      toast.success("ChatCPT Clone has Responded!", {
+        id: notification,
+      });
     });
   };
   return (
